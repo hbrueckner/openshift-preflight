@@ -39,8 +39,9 @@ func GetContainerPolicyExceptions(ctx context.Context, pc PyxisClient) (policy.P
 		return "", fmt.Errorf("could not retrieve project: %w", err)
 	}
 	logger.V(log.DBG).Info("certification project", "name", certProject.Name)
+
 	if certProject.ScratchProject() {
-		return policy.PolicyScratch, nil
+		return policy.PolicyScratchNonRoot, nil
 	}
 
 	// if a partner sets `Host Level Access` in connect to `Privileged`, enable RootExceptionContainerPolicy checks

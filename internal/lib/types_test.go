@@ -72,9 +72,9 @@ var _ = Describe("Policy Resolution", func() {
 		})
 
 		It("should return a scratch policy exception if the project has type flag in the API", func() {
-			fakePC.getProjectsFunc = gpFuncReturnScratchException
+			fakePC.getProjectsFunc = gpFuncReturnScratchNonRootException
 			p, err := GetContainerPolicyExceptions(context.TODO(), fakePC)
-			Expect(p).To(Equal(policy.PolicyScratch))
+			Expect(p).To(Equal(policy.PolicyScratchNonRoot))
 			Expect(err).ToNot(HaveOccurred())
 		})
 
