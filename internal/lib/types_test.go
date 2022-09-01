@@ -78,10 +78,10 @@ var _ = Describe("Policy Resolution", func() {
 			Expect(err).ToNot(HaveOccurred())
 		})
 
-		It("should return a scratch policy exception if the project has os_content_type flag in the API", func() {
-			fakePC.getProjectsFunc = gpFuncReturnScratchImageException
+		It("should return a scratch and root policy exception if the project has os_content_type flag in the API", func() {
+			fakePC.getProjectsFunc = gpFuncReturnScratchRootImageException
 			p, err := GetContainerPolicyExceptions(context.TODO(), fakePC)
-			Expect(p).To(Equal(policy.PolicyScratch))
+			Expect(p).To(Equal(policy.PolicyScratchRoot))
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -259,7 +259,7 @@ var _ = Describe("Container Certification Submitter", func() {
 		Context("and no docker config command argument was provided", func() {
 			BeforeEach(func() {
 				fakePC.setSRFuncSubmitSuccessfully("", "")
-				fakePC.getProjectsFunc = gpFuncReturnScratchException
+				fakePC.getProjectsFunc = gpFuncReturnScratchNonRootException
 			})
 			It("should not throw an error", func() {
 				sbmt.DockerConfig = ""
@@ -318,7 +318,7 @@ var _ = Describe("Container Certification Submitter", func() {
 		Context("and scratch policy was executed, so no rpmManifest exists on disk", func() {
 			BeforeEach(func() {
 				fakePC.setSRFuncSubmitSuccessfully("12345", "12345")
-				fakePC.getProjectsFunc = gpFuncReturnScratchException
+				fakePC.getProjectsFunc = gpFuncReturnScratchNonRootException
 			})
 			It("should not throw an error", func() {
 				err := os.Remove(path.Join(aw.Path(), check.DefaultRPMManifestFilename))
@@ -343,7 +343,7 @@ var _ = Describe("Container Certification Submitter", func() {
 		Context("and the submission fails", func() {
 			BeforeEach(func() {
 				fakePC.submitResultsFunc = srFuncReturnError
-				fakePC.getProjectsFunc = gpFuncReturnScratchException
+				fakePC.getProjectsFunc = gpFuncReturnScratchNonRootException
 			})
 
 			It("should throw an error", func() {
@@ -380,7 +380,7 @@ var _ = Describe("Container Certification Submitter", func() {
 		Context("and the submission succeeds", func() {
 			BeforeEach(func() {
 				fakePC.setSRFuncSubmitSuccessfully("", "")
-				fakePC.getProjectsFunc = gpFuncReturnScratchException
+				fakePC.getProjectsFunc = gpFuncReturnScratchNonRootException
 			})
 			It("should not throw an error", func() {
 				err := sbmt.Submit(testcontext)

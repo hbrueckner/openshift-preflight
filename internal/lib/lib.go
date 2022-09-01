@@ -41,6 +41,9 @@ func GetContainerPolicyExceptions(ctx context.Context, pc PyxisClient) (policy.P
 	logger.V(log.DBG).Info("certification project", "name", certProject.Name)
 
 	if certProject.ScratchProject() {
+		if certProject.Container.Privileged {
+			return policy.PolicyScratchRoot, nil
+		}
 		return policy.PolicyScratchNonRoot, nil
 	}
 

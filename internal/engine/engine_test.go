@@ -335,12 +335,18 @@ var _ = Describe("Check Name Queries", func() {
 			"AllImageRefsInRelatedImages",
 			"FollowsRestrictedNetworkEnablementGuidelines",
 		}),
-		Entry("scratch (non-root) container policy", ScratchContainerPolicy, []string{
+		Entry("scratch (non-root) container policy", ScratchNonRootContainerPolicy, []string{
 			"HasLicense",
 			"HasUniqueTag",
 			"LayerCountAcceptable",
 			"HasRequiredLabel",
 			"RunAsNonRoot",
+		}),
+		Entry("scratch (root) container policy", ScratchRootContainerPolicy, []string{
+			"HasLicense",
+			"HasUniqueTag",
+			"LayerCountAcceptable",
+			"HasRequiredLabel",
 		}),
 		Entry("root container policy", RootExceptionContainerPolicy, []string{
 			"HasLicense",
